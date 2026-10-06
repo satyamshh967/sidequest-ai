@@ -1,0 +1,62 @@
+[
+  {
+    "id": "sample-01",
+    "itemTitle": "Find Rough Oak Bark",
+    "targetDescription": "Mature tree trunk with rough, deeply fissured grey or brown bark.",
+    "verificationGuidance": "Confirm visible bark texture with ridges and fissures. Reject smooth painted surfaces or indoor wood.",
+    "imagePath": "eval/data/photos/sample-01.jpg",
+    "groundTruthFound": true,
+    "scenario": "standard",
+    "notes": "Clear close-up of mature white oak bark."
+  },
+  {
+    "id": "sample-02",
+    "itemTitle": "Spot Pale Lichen Patch",
+    "targetDescription": "Minty-green or pale grey crustose/foliose lichen growing on rock or tree bark.",
+    "verificationGuidance": "Verify distinct dry lichen pattern. Do not confuse with bright green velvety moss.",
+    "imagePath": "eval/data/photos/sample-02.jpg",
+    "groundTruthFound": true,
+    "scenario": "look_alike",
+    "notes": "Lichen growing adjacent to moss on granite boulder."
+  },
+  {
+    "id": "sample-03",
+    "itemTitle": "Acorn or Nut Cap",
+    "targetDescription": "Fallen oak acorn, acorn nut, or wooden cupule on forest floor.",
+    "verificationGuidance": "Must show recognizable acorn cap or nut among leaf litter.",
+    "imagePath": "eval/data/photos/sample-03.jpg",
+    "groundTruthFound": true,
+    "scenario": "partial_view",
+    "notes": "Acorn partially buried under wet pine needles."
+  },
+  {
+    "id": "sample-04",
+    "itemTitle": "Yellow Autumn Leaf",
+    "targetDescription": "Deciduous tree leaf with distinct golden or amber autumn pigmentation.",
+    "verificationGuidance": "Must show yellow foliage. Reject green or purely brown decomposed leaves.",
+    "imagePath": "eval/data/photos/sample-04.jpg",
+    "groundTruthFound": true,
+    "scenario": "low_light",
+    "notes": "Taken in shaded understory at dusk."
+  },
+  {
+    "id": "sample-05",
+    "itemTitle": "Smooth River Stone",
+    "targetDescription": "Naturally rounded, water-weathered stone or pebble.",
+    "verificationGuidance": "Reject jagged artificial concrete, asphalt chunks, or angular crushed gravel.",
+    "imagePath": "eval/data/photos/sample-05.jpg",
+    "groundTruthFound": false,
+    "scenario": "look_alike",
+    "notes": "Angular chunk of crushed asphalt; expected false."
+  },
+  {
+    "id": "sample-06",
+    "itemTitle": "Pinecone Scales",
+    "targetDescription": "Conifer cone (pine, spruce, fir) showing open woody scales.",
+    "verificationGuidance": "Confirm cone structure with radiating scales. Reject pine needles alone.",
+    "imagePath": "eval/data/photos/sample-06.jpg",
+    "groundTruthFound": true,
+    "scenario": "standard",
+    "notes": "Weathered Douglas fir cone on trail edge."
+  }
+]

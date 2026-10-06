@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Sidequest — Outdoor Scavenger Hunt</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#16a34a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- Dim Pocket Mode Overlay -->
+    <div id="dim-overlay">
+      <h2>🌿 Pocket Walk Mode Active</h2>
+      <p>Screen is dimmed. Look up and explore nature!</p>
+      <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #475569;">Tap anywhere to wake screen</p>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-title">
+        <span>🌿</span> Sidequest
+      </div>
+      <div class="badge-offline" id="status-badge">100% Offline</div>
+    </header>
+
+    <!-- 1. SETUP VIEW -->
+    <section id="view-setup" class="view-section active">
+      <div class="setup-card">
+        <div class="form-group">
+          <label>Setting</label>
+          <div class="pill-grid" id="setting-options">
+            <button type="button" class="pill-btn active" data-val="park">🌳 Park</button>
+            <button type="button" class="pill-btn" data-val="trail">🥾 Forest Trail</button>
+            <button type="button" class="pill-btn" data-val="street">🏘️ Street</button>
+            <button type="button" class="pill-btn" data-val="backyard">🏡 Backyard</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Walk Duration</label>
+          <div class="pill-grid" id="time-options">
+            <button type="button" class="pill-btn active" data-val="15">15 min</button>
+            <button type="button" class="pill-btn" data-val="30">30 min</button>
+            <button type="button" class="pill-btn" data-val="45">45 min</button>
+            <button type="button" class="pill-btn" data-val="60">60 min</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Age Band</label>
+          <div class="pill-grid" id="age-options">
+            <button type="button" class="pill-btn active" data-val="young_kids">Kids (4–8)</button>
+            <button type="button" class="pill-btn" data-val="older_kids">Kids (9–13)</button>
+            <button type="button" class="pill-btn" data-val="adults">Adults / All</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Season & Region (Hand-typed)</label>
+          <input type="text" id="input-region" class="input-text" value="Autumn / Pacific Northwest" placeholder="e.g. Autumn / City Park">
+        </div>
+
+        <div class="form-group">
+          <label>Accessibility</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-paved"> Flat, paved paths only
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-mobility"> Low mobility (closer items)
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-vision"> Low vision (audio/tactile focused)
+            </label>
+          </div>
+        </div>
+
+        <button id="btn-start-quest" class="btn-primary">
+          <span>🚀</span> Start Scavenger Walk
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. WALK VIEW -->
+    <section id="view-walk" class="view-section">
+      <div class="walk-header">
+        <div class="ratio-pill" id="live-sky-ratio">
+          <span>⛅</span> <span id="sky-ratio-text">98% Eyes on Sky</span>
+        </div>
+        <button id="btn-toggle-dim" class="btn-dim">🌙 Pocket Dim</button>
+      </div>
+
+      <div class="prompt-card">
+        <div>
+          <div class="category-tag" id="current-category">LOOK</div>
+          <h2 class="item-title" id="current-title">Item Title</h2>
+          <div class="spoken-prompt" id="current-prompt">Prompt text loading...</div>
+          <div class="voice-ctrl">
+            <button id="btn-replay-voice" class="btn-replay-voice">
+              <span>🔊</span> Hear Prompt
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <button id="btn-found-it" class="btn-find-big">
+            <span>📸</span> I Found It!
+          </button>
+          <input type="file" id="camera-file-input" accept="image/*" capture="environment">
+          <button id="btn-skip-item" style="background:transparent; border:none; color:#64748b; font-size:0.85rem; margin-top:0.75rem; cursor:pointer;">
+            Skip this item ➜
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VERIFY MODAL / SHEET -->
+    <div id="verify-overlay">
+      <div class="verify-sheet">
+        <div id="verify-loading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Gemma 3 analyzing find offline...</p>
+        </div>
+
+        <div id="verify-content" style="display: none; flex-direction: column; gap: 0.85rem;">
+          <div id="verify-badge" class="verify-status-badge success">Found!</div>
+          <div id="verify-spoken" class="spoken-feedback-box"></div>
+          <div id="verify-caveat" class="species-caveat-box" style="display: none;"></div>
+          <button id="btn-next-item" class="btn-primary" style="margin-top: 0.5rem;">
+            Next Quest Item ➜
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. COMPLETE VIEW -->
+    <section id="view-complete" class="view-section">
+      <div class="setup-card" style="text-align: center; gap: 1.5rem;">
+        <h2 style="color: var(--primary); font-size: 2rem;">🎉 Walk Finished!</h2>
+        <p id="complete-subtitle" style="color: #cbd5e1; font-size: 1.1rem;"></p>
+
+        <div style="background: #0b1510; border: 1px solid var(--surface-border); border-radius: 12px; padding: 1.25rem;">
+          <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Screen-to-Sky Ratio</div>
+          <div id="final-sky-ratio" style="font-size: 2.5rem; font-weight: 900; color: var(--accent-sky); margin: 0.25rem 0;">95.4%</div>
+          <div id="final-time-breakdown" style="font-size: 0.9rem; color: #cbd5e1;"></div>
+        </div>
+
+        <a id="btn-view-journal" href="#" target="_blank" class="btn-primary" style="text-decoration: none;">
+          📖 Open Field Journal
+        </a>
+        <button id="btn-new-walk" style="background: #192720; border: 1px solid var(--surface-border); color: #cbd5e1; padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer;">
+          Start New Walk
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
