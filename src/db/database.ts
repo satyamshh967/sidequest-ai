@@ -113,16 +113,16 @@ export class SidequestDatabase {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         record.id,
-        record.questTitle,
-        record.setting,
-        record.ageBand,
-        record.seasonAndRegion,
-        record.startTime,
+        record.questTitle || 'Outdoor Nature Quest',
+        record.setting || 'park',
+        record.ageBand || 'young_kids',
+        record.seasonAndRegion || 'Local Walk',
+        record.startTime || new Date().toISOString(),
         record.endTime ?? null,
         record.durationSeconds ?? 0,
         record.screenActiveSeconds ?? 0,
         record.screenToSkyRatio ?? 0,
-        record.questPlanJson,
+        record.questPlanJson || '{}',
         new Date().toISOString(),
       ]
     );
@@ -145,7 +145,7 @@ export class SidequestDatabase {
       `UPDATE sessions 
        SET end_time = ?, duration_seconds = ?, screen_active_seconds = ?, screen_to_sky_ratio = ? 
        WHERE id = ?`,
-      [endTime, durationSeconds, screenActiveSeconds, screenToSkyRatio, sessionId]
+      [endTime || null, durationSeconds || 0, screenActiveSeconds || 0, screenToSkyRatio, sessionId]
     );
     this.persist();
   }
@@ -162,18 +162,18 @@ export class SidequestDatabase {
       [
         find.id,
         find.sessionId,
-        find.questItemId,
-        find.itemTitle,
-        find.category,
-        find.timestamp,
+        find.questItemId || 'item',
+        find.itemTitle || 'Item',
+        find.category || 'look',
+        find.timestamp || new Date().toISOString(),
         find.found ? 1 : 0,
-        find.confidence,
+        typeof find.confidence === 'number' ? find.confidence : 0.5,
         find.isUncertain ? 1 : 0,
-        find.speciesIdentified,
-        find.certaintyCaveat,
-        find.spokenFeedback,
-        find.followUpQuestion,
-        find.observationNotes,
+        find.speciesIdentified ?? null,
+        find.certaintyCaveat ?? null,
+        find.spokenFeedback || '',
+        find.followUpQuestion ?? null,
+        find.observationNotes || '',
         find.photoFilename ?? null,
       ]
     );

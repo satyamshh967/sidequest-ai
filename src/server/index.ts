@@ -60,15 +60,17 @@ app.get('/api/status', async (_req: Request, res: Response) => {
 // 1. Generate Quest
 app.post('/api/quest/generate', async (req: Request, res: Response) => {
   try {
-    const questPlan = await tools.generateQuestTool.execute({
-      context: req.body,
-    });
+    const result: any = await tools.generateQuestTool.execute(req.body);
+    if (result && result.error) {
+      throw new Error(result.message || 'Quest generation failed validation');
+    }
+    const questPlan = result;
 
     const sessionId = randomUUID();
     db.saveSession({
       id: sessionId,
-      questTitle: questPlan.questTitle,
-      setting: questPlan.setting,
+      questTitle: questPlan.questTitle || 'Outdoor Nature Quest',
+      setting: questPlan.setting || req.body.setting || 'park',
       ageBand: req.body.ageBand || 'young_kids',
       seasonAndRegion: req.body.seasonAndRegion || 'Local Walk',
       startTime: new Date().toISOString(),
@@ -116,15 +118,18 @@ app.post(
         );
       }
 
-      const verification = await tools.verifyFindTool.execute({
-        context: {
-          questItemId: questItemId || 'unknown',
-          itemTitle: itemTitle || 'Unknown item',
-          targetDescription: targetDescription || '',
-          verificationGuidance: verificationGuidance || '',
-          imageBase64,
-        },
+      const verifyRes: any = await tools.verifyFindTool.execute({
+        questItemId: questItemId || 'unknown',
+        itemTitle: itemTitle || 'Unknown item',
+        targetDescription: targetDescription || '',
+        verificationGuidance: verificationGuidance || '',
+        imageBase64,
       });
+
+      if (verifyRes && verifyRes.error) {
+        throw new Error(verifyRes.message || 'Find verification validation failed');
+      }
+      const verification = verifyRes;
 
       const findId = randomUUID();
       db.saveFind({
@@ -219,9 +224,7 @@ app.post('/api/session/complete', async (req: Request, res: Response) => {
         ).toFixed(1)}% of the walk with eyes on nature!`,
     };
 
-    const journalExport = await tools.saveJournalTool.execute({
-      context: journalData,
-    });
+    const journalExport = await tools.saveJournalTool.execute(journalData);
 
     res.json({
       journalUrl: `/journals/journal-${sessionId}.html`,
