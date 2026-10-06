@@ -1,0 +1,43 @@
+{
+  "name": "sidequest",
+  "version": "0.1.0",
+  "description": "Offline, audio-first scavenger-hunt agent for families on walks",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval": "tsx eval/harness.ts"
+  },
+  "keywords": [
+    "hacktoberfest",
+    "touch-grass",
+    "offline-ai",
+    "multimodal",
+    "gemma",
+    "mastra",
+    "pwa"
+  ],
+  "author": "Sidequest Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "@mastra/core": "^1.74.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "sql.js": "^1.12.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.10.7",
+    "@types/sql.js": "^1.4.9",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}
