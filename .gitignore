@@ -3,9 +3,7 @@ dist/
 .env
 .env.local
 *.log
-data/*.db
-data/*.sqlite
-data/uploads/
+data/
 eval/results/
 .DS_Store
 Thumbs.db
