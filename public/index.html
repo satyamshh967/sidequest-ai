@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Sidequest — Outdoor Scavenger Hunt</title>
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#16a34a">
+  <meta name="theme-color" content="#2563eb">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -15,21 +15,21 @@
   <div id="app-container">
     <!-- Dim Pocket Mode Overlay -->
     <div id="dim-overlay">
-      <h2>🌿 Pocket Walk Mode Active</h2>
+      <div class="dim-icon">🌿</div>
+      <h2>Pocket Walk Mode Active</h2>
       <p>Screen is dimmed. Look up and explore nature!</p>
-      <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #475569;">Tap anywhere to wake screen</p>
+      <div class="dim-hint">Tap anywhere to wake screen</div>
     </div>
-
-    <!-- Header -->
-    <header class="app-header">
-      <div class="brand-title">
-        <span>🌿</span> Sidequest
-      </div>
-      <div class="badge-offline" id="status-badge">100% Offline</div>
-    </header>
 
     <!-- 1. SETUP VIEW -->
     <section id="view-setup" class="view-section active">
+      <header class="app-header">
+        <div class="brand-title">
+          <span>🌿</span> Sidequest
+        </div>
+        <div class="badge-offline" id="status-badge">100% Offline</div>
+      </header>
+
       <div class="setup-card">
         <div class="form-group">
           <label>Setting</label>
@@ -86,74 +86,131 @@
       </div>
     </section>
 
-    <!-- 2. WALK VIEW -->
-    <section id="view-walk" class="view-section">
-      <div class="walk-header">
-        <div class="ratio-pill" id="live-sky-ratio">
-          <span>⛅</span> <span id="sky-ratio-text">98% Eyes on Sky</span>
+    <!-- 2. WALK VIEW (Inspired by Mobile Navigation Reference) -->
+    <section id="view-walk" class="view-section walk-mode-fullscreen">
+      <!-- Full-Screen Interactive Field Radar Canvas -->
+      <canvas id="nature-map-canvas"></canvas>
+
+      <!-- Top Floating Navigation Pill (Arrow + to <Item>) -->
+      <div class="nav-floating-top">
+        <div class="nav-banner-pill" id="nav-banner-pill">
+          <div class="nav-arrow-circle">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"></line>
+              <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+          </div>
+          <div class="nav-banner-text">
+            <span class="nav-prefix">to</span>
+            <span class="nav-target" id="nav-target-name">Rough Oak Bark</span>
+          </div>
+          <button class="nav-audio-btn" id="btn-audio-speak" title="Listen to prompt" type="button">
+            🔊
+          </button>
         </div>
-        <button id="btn-toggle-dim" class="btn-dim">🌙 Pocket Dim</button>
       </div>
 
-      <div class="prompt-card">
-        <div>
-          <div class="category-tag" id="current-category">LOOK</div>
-          <h2 class="item-title" id="current-title">Item Title</h2>
-          <div class="spoken-prompt" id="current-prompt">Prompt text loading...</div>
-          <div class="voice-ctrl">
-            <button id="btn-replay-voice" class="btn-replay-voice">
-              <span>🔊</span> Hear Prompt
-            </button>
+      <!-- Floating Map Compass Tool Button -->
+      <button class="map-compass-btn" id="btn-compass-orient" title="Re-orient heading" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2.5">
+          <polygon points="12 2 19 21 12 17 5 21 12 2"></polygon>
+        </svg>
+      </button>
+
+      <!-- Bottom Floating HUD Container -->
+      <div class="bottom-hud-wrapper">
+        <div class="floating-item-card">
+          <div class="item-icon-box" id="hud-item-icon">
+            🌳
+          </div>
+          <div class="item-info">
+            <div class="item-primary-name" id="hud-item-title">Rough Oak Bark</div>
+            <div class="item-sub-desc" id="hud-item-subtitle">Touch Safe • Feel craggy grooves</div>
+          </div>
+          <div class="card-action-group">
+            <button class="btn-circle-help" id="btn-show-hint" title="Show Hint & Safety" type="button">?</button>
+            <button class="btn-got-it" id="btn-found-it" type="button">Got it</button>
           </div>
         </div>
 
-        <div>
-          <button id="btn-found-it" class="btn-find-big">
-            <span>📸</span> I Found It!
-          </button>
-          <input type="file" id="camera-file-input" accept="image/*" capture="environment">
-          <button id="btn-skip-item" style="background:transparent; border:none; color:#64748b; font-size:0.85rem; margin-top:0.75rem; cursor:pointer;">
-            Skip this item ➜
-          </button>
+        <!-- Hidden Camera Input -->
+        <input type="file" id="camera-file-input" accept="image/*" capture="environment">
+
+        <!-- Bottom Sub-bar Meta Info -->
+        <div class="hud-sub-bar">
+          <div class="hud-counter-pill" id="hud-progress-counter">
+            <span class="counter-dot"></span>
+            <span id="counter-text">1 of 6 left</span>
+          </div>
+          <div class="hud-metrics-pill" id="live-sky-ratio">
+            <span>⛅</span> <span id="sky-ratio-text">98% Eyes on Sky</span>
+          </div>
+          <div class="hud-extra-actions">
+            <button class="btn-hud-dim" id="btn-toggle-dim" type="button" title="Pocket Dim Mode">🌙 Dim</button>
+            <button class="btn-hud-skip" id="btn-skip-item" type="button">Skip ➜</button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. VERIFY MODAL / SHEET -->
-    <div id="verify-overlay">
-      <div class="verify-sheet">
+    <!-- 3. HINT & SENSORY PROMPT SHEET -->
+    <div id="hint-overlay" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="sheet-handle"></div>
+        <div class="hint-header">
+          <div class="category-tag" id="hint-category-tag">LOOK</div>
+          <h3 id="hint-item-title">Item Title</h3>
+        </div>
+        <div class="hint-body">
+          <p class="spoken-prompt" id="hint-prompt-text">Prompt details...</p>
+          <div class="hint-guidance-box" id="hint-guidance-box">
+            <strong>What to look for:</strong>
+            <span id="hint-guidance-text">Guidance notes...</span>
+          </div>
+          <div class="safety-note-box" id="hint-safety-box">
+            <strong>Safety rule:</strong> Stay safe on trails and never touch wild fungi or wildlife.
+          </div>
+        </div>
+        <button id="btn-close-hint" class="btn-primary" style="margin-top: 1rem;" type="button">Got It!</button>
+      </div>
+    </div>
+
+    <!-- 4. VERIFY MODAL / SHEET -->
+    <div id="verify-overlay" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="sheet-handle"></div>
         <div id="verify-loading" class="loading-spinner">
           <div class="spinner"></div>
-          <p>Gemma 3 analyzing find offline...</p>
+          <p>Gemma 3 examining photo offline...</p>
         </div>
 
         <div id="verify-content" style="display: none; flex-direction: column; gap: 0.85rem;">
           <div id="verify-badge" class="verify-status-badge success">Found!</div>
           <div id="verify-spoken" class="spoken-feedback-box"></div>
           <div id="verify-caveat" class="species-caveat-box" style="display: none;"></div>
-          <button id="btn-next-item" class="btn-primary" style="margin-top: 0.5rem;">
+          <button id="btn-next-item" class="btn-primary" style="margin-top: 0.5rem;" type="button">
             Next Quest Item ➜
           </button>
         </div>
       </div>
     </div>
 
-    <!-- 4. COMPLETE VIEW -->
+    <!-- 5. COMPLETE VIEW -->
     <section id="view-complete" class="view-section">
       <div class="setup-card" style="text-align: center; gap: 1.5rem;">
-        <h2 style="color: var(--primary); font-size: 2rem;">🎉 Walk Finished!</h2>
+        <h2 style="color: #2563eb; font-size: 2rem;">🎉 Walk Finished!</h2>
         <p id="complete-subtitle" style="color: #cbd5e1; font-size: 1.1rem;"></p>
 
         <div style="background: #0b1510; border: 1px solid var(--surface-border); border-radius: 12px; padding: 1.25rem;">
           <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Screen-to-Sky Ratio</div>
-          <div id="final-sky-ratio" style="font-size: 2.5rem; font-weight: 900; color: var(--accent-sky); margin: 0.25rem 0;">95.4%</div>
+          <div id="final-sky-ratio" style="font-size: 2.5rem; font-weight: 900; color: #38bdf8; margin: 0.25rem 0;">95.4%</div>
           <div id="final-time-breakdown" style="font-size: 0.9rem; color: #cbd5e1;"></div>
         </div>
 
         <a id="btn-view-journal" href="#" target="_blank" class="btn-primary" style="text-decoration: none;">
           📖 Open Field Journal
         </a>
-        <button id="btn-new-walk" style="background: #192720; border: 1px solid var(--surface-border); color: #cbd5e1; padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer;">
+        <button id="btn-new-walk" type="button" style="background: #192720; border: 1px solid var(--surface-border); color: #cbd5e1; padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer;">
           Start New Walk
         </button>
       </div>
