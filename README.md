@@ -3,6 +3,12 @@
 > **An offline, audio-first scavenger-hunt agent for families on walks.**  
 > Built for the DEV **Hacktoberfest Open-Source AI Challenge Week 1: "Touch Grass"** (Oct 5 – Oct 11, 2026).
 
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Gemma 3](https://img.shields.io/badge/Gemma_3-Multimodal_4B-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev/gemma)
+[![Mastra](https://img.shields.io/badge/Agent-Mastra_Framework-8B5CF6?style=flat-square)](https://mastra.ai)
+[![Offline First](https://img.shields.io/badge/Offline-100%25_Zero_Cloud-emerald?style=flat-square)]()
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE)
+
 ---
 
 ## 🎯 The Idea: Minimize the Screen, Maximize the Sky
