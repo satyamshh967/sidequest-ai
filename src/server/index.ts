@@ -236,6 +236,16 @@ app.post('/api/session/complete', async (req: Request, res: Response) => {
   }
 });
 
+// 5. List Recent Sessions
+app.get('/api/sessions', (_req: Request, res: Response) => {
+  try {
+    const sessions = db.listSessions();
+    res.json(sessions);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`[Sidequest Server] Running on http://0.0.0.0:${port} (Offline Only)`);
 });

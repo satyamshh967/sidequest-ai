@@ -1,11 +1,11 @@
 {
-  "name": "Sidequest — Outdoor Scavenger Hunt",
+  "name": "Sidequest — Outdoor Nature Expedition",
   "short_name": "Sidequest",
-  "description": "Offline, audio-first scavenger-hunt agent for families on walks",
+  "description": "Offline, audio-first nature scavenger-hunt agent for walks",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#09120e",
-  "theme_color": "#16a34a",
+  "background_color": "#38bdf8",
+  "theme_color": "#2563eb",
   "icons": [
     {
       "src": "/icon.svg",

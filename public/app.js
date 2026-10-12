@@ -60,23 +60,42 @@ function showView(viewId) {
       setTimeout(initMapCanvas, 50);
     }
   }
+
+  // Update active dock tab
+  document.querySelectorAll('.dock-tab-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.tab === viewId);
+  });
+
+  if (viewId === 'view-journal') {
+    loadJournalHistory();
+  }
 }
 
 // Pill button group helper
-function setupPillGroup(containerId) {
+function setupPillGroup(containerId, onSelect) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.addEventListener('click', (e) => {
-    const btn = e.target.closest('.pill-btn');
+    const btn = e.target.closest('.pill-btn, .app-chip-btn');
     if (!btn) return;
-    container.querySelectorAll('.pill-btn').forEach((b) => b.classList.remove('active'));
+    container.querySelectorAll('.pill-btn, .app-chip-btn').forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
+    if (onSelect) onSelect(btn.dataset.val);
   });
 }
 
 function getPillValue(containerId) {
-  const active = document.querySelector(`#${containerId} .pill-btn.active`);
+  const active = document.querySelector(`#${containerId} .pill-btn.active, #${containerId} .app-chip-btn.active`);
   return active ? active.dataset.val : null;
+}
+
+function syncSeasonAndRegion() {
+  const season = getPillValue('season-options') || 'Autumn';
+  const region = getPillValue('region-options') || 'Pacific Northwest';
+  const input = document.getElementById('input-region');
+  if (input) {
+    input.value = `${season} / ${region}`;
+  }
 }
 
 // Category to Emoji Helper
@@ -98,6 +117,30 @@ document.addEventListener('DOMContentLoaded', () => {
   setupPillGroup('setting-options');
   setupPillGroup('time-options');
   setupPillGroup('age-options');
+  setupPillGroup('season-options', syncSeasonAndRegion);
+  setupPillGroup('region-options', syncSeasonAndRegion);
+
+  // Edit region by hand button
+  const btnEditRegion = document.getElementById('btn-edit-region');
+  if (btnEditRegion) {
+    btnEditRegion.addEventListener('click', () => {
+      const input = document.getElementById('input-region');
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    });
+  }
+
+  // Bottom Game Dock Tab Switching
+  document.querySelectorAll('.dock-tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      if (tab) {
+        showView(tab);
+      }
+    });
+  });
 
   // Dim Mode Toggle
   const dimOverlay = document.getElementById('dim-overlay');
@@ -182,7 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
 async function startQuest() {
   const startBtn = document.getElementById('btn-start-quest');
   startBtn.disabled = true;
-  startBtn.innerHTML = '<span>⏳</span> Preparing Quest Offline...';
+  startBtn.innerHTML = `
+    <span class="battle-btn-content">
+      <span class="battle-btn-text">PREPARING EXPEDITION...</span>
+      <span class="battle-btn-sub">⏳ Gemma 3 generating offline</span>
+    </span>
+  `;
 
   const payload = {
     setting: getPillValue('setting-options') || 'park',
@@ -222,7 +270,13 @@ async function startQuest() {
     alert(`Could not start quest: ${err.message}`);
   } finally {
     startBtn.disabled = false;
-    startBtn.innerHTML = '<span>🚀</span> Start Scavenger Walk';
+    startBtn.innerHTML = `
+      <span class="battle-btn-glare"></span>
+      <span class="battle-btn-content">
+        <span class="battle-btn-text">START EXPEDITION</span>
+        <span class="battle-btn-sub">⚡ 5-8 QUEST FINDS</span>
+      </span>
+    `;
   }
 }
 
@@ -243,6 +297,8 @@ function startScreenTimer() {
     const skyText = `${skyPct}% Eyes on Sky`;
     const el1 = document.getElementById('sky-ratio-text');
     if (el1) el1.textContent = skyText;
+    const elTop = document.getElementById('top-sky-meter');
+    if (elTop) elTop.textContent = `${skyPct}% SKY`;
   }, 1000);
 }
 
@@ -323,6 +379,12 @@ async function handlePhotoCaptured(e) {
     if (ver.found && !ver.isUncertain) {
       badge.classList.add('success');
       badge.textContent = '🎉 Found & Verified!';
+      // Add XP / seed tokens in top HUD
+      const seedsEl = document.getElementById('top-seeds-count');
+      if (seedsEl) {
+        const cur = parseInt(seedsEl.textContent || '150', 10);
+        seedsEl.textContent = cur + 50;
+      }
     } else if (ver.isUncertain) {
       badge.classList.add('uncertain');
       badge.textContent = '🤔 Take a Closer Look';
@@ -388,6 +450,60 @@ async function finishWalk() {
   }
 }
 
+// Fetch & render past expeditions in the Journal view
+async function loadJournalHistory() {
+  const listEl = document.getElementById('journal-history-list');
+  if (!listEl) return;
+
+  try {
+    const res = await fetch('/api/sessions');
+    if (!res.ok) return;
+    const sessions = await res.json();
+    if (!sessions || sessions.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-journal-card">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎒</div>
+          <h3>No walk recorded yet</h3>
+          <p>Start your first walk expedition to unlock field entries and species observations!</p>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = sessions.map((s) => {
+      const durMin = Math.max(1, Math.round((s.duration_seconds || 0) / 60));
+      const skyRatioPct = Math.round((1 - (s.screen_to_sky_ratio || 0)) * 100);
+      const dateStr = s.start_time ? new Date(s.start_time).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent Walk';
+      return `
+        <div class="setup-group-card" style="padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">${escapeHtml(s.quest_title)}</div>
+              <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">${escapeHtml(s.season_and_region || s.setting)} • ${dateStr}</div>
+            </div>
+            <div style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; font-weight: 800; font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; flex-shrink: 0;">
+              ${skyRatioPct}% Sky
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+            <span style="font-size: 0.82rem; color: #475569; font-weight: 600;">⏱️ ${durMin} min walk</span>
+            <a href="/journals/journal-${s.id}.html" target="_blank" class="game-battle-btn" style="padding: 6px 14px; font-size: 0.82rem; text-decoration: none; width: auto; box-shadow: none;">
+              <span class="battle-btn-content"><span class="battle-btn-text">Open Journal 📖</span></span>
+            </a>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Failed to load journals:', err);
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
 function resetState() {
   currentQuest = null;
   currentSessionId = null;
@@ -407,8 +523,8 @@ function initMapCanvas() {
   mapCtx = mapCanvas.getContext('2d');
 
   function resizeCanvas() {
-    mapCanvas.width = window.innerWidth;
-    mapCanvas.height = window.innerHeight;
+    mapCanvas.width = mapCanvas.parentElement ? mapCanvas.parentElement.clientWidth : window.innerWidth;
+    mapCanvas.height = mapCanvas.parentElement ? mapCanvas.parentElement.clientHeight : window.innerHeight;
     userPos = { x: mapCanvas.width / 2, y: mapCanvas.height * 0.58 };
   }
   resizeCanvas();

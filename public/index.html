@@ -3,16 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Sidequest — Outdoor Scavenger Hunt</title>
+  <title>Sidequest — Outdoor Nature Expedition</title>
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2563eb">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <link rel="apple-touch-icon" href="/icon.svg">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <div id="app-container">
+  <!-- Main App Shell -->
+  <div id="app-container" class="game-app-shell">
+    
+    <!-- Top Game Status Bar (Reference: Mobile Game Top HUD) -->
+    <header class="game-top-bar">
+      <!-- Player Profile Badge -->
+      <div class="player-hud-pill">
+        <div class="player-avatar-icon">🤠</div>
+        <div class="player-hud-meta">
+          <span class="player-name">SCOUT</span>
+          <span class="player-level-badge">⭐ LV. 1</span>
+        </div>
+      </div>
+
+      <!-- Live Nature / Sky Energy -->
+      <div class="resource-hud-pill energy-pill" id="hud-energy-pill" title="Screen-to-Sky ratio">
+        <span class="resource-icon">⚡</span>
+        <span class="resource-val" id="top-sky-meter">100% SKY</span>
+      </div>
+
+      <!-- Seed Tokens / XP -->
+      <div class="resource-hud-pill seeds-pill" title="Expedition Score">
+        <span class="resource-icon">🌰</span>
+        <span class="resource-val" id="top-seeds-count">150</span>
+      </div>
+
+      <!-- 100% Offline Local Badge -->
+      <div class="offline-shield-badge" title="Running 100% Offline with Gemma 3">
+        <span class="shield-dot"></span>
+        <span>LOCAL</span>
+      </div>
+    </header>
+
     <!-- Dim Pocket Mode Overlay -->
     <div id="dim-overlay">
       <div class="dim-icon">🌿</div>
@@ -21,77 +54,202 @@
       <div class="dim-hint">Tap anywhere to wake screen</div>
     </div>
 
-    <!-- 1. SETUP VIEW -->
+    <!-- VIEW 1: EXPEDITION SETUP VIEW (Game Chapter / Map Select) -->
     <section id="view-setup" class="view-section active">
-      <header class="app-header">
-        <div class="brand-title">
-          <span>🌿</span> Sidequest
-        </div>
-        <div class="badge-offline" id="status-badge">100% Offline</div>
-      </header>
+      <div class="chapter-banner-card">
+        <div class="chapter-tag">CHAPTER 1</div>
+        <h1 class="chapter-title">The Outdoor Expedition</h1>
+        <p class="chapter-desc">Put the phone away. Walk, listen, touch, and spot hidden patterns in the wild.</p>
+      </div>
 
-      <div class="setup-card">
-        <div class="form-group">
-          <label>Setting</label>
-          <div class="pill-grid" id="setting-options">
-            <button type="button" class="pill-btn active" data-val="park">🌳 Park</button>
-            <button type="button" class="pill-btn" data-val="trail">🥾 Forest Trail</button>
-            <button type="button" class="pill-btn" data-val="street">🏘️ Street</button>
-            <button type="button" class="pill-btn" data-val="backyard">🏡 Backyard</button>
+      <div class="game-setup-content">
+        <!-- 1. SETTING SELECTOR -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">🗺️</span>
+            <h3>TERRAIN SETTING</h3>
+          </div>
+          <div class="pill-grid grid-4" id="setting-options">
+            <button type="button" class="app-chip-btn active" data-val="park">
+              <span class="chip-emoji">🌳</span>
+              <span class="chip-label">Park</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="trail">
+              <span class="chip-emoji">🥾</span>
+              <span class="chip-label">Trail</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="street">
+              <span class="chip-emoji">🏘️</span>
+              <span class="chip-label">Street</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="backyard">
+              <span class="chip-emoji">🏡</span>
+              <span class="chip-label">Backyard</span>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Walk Duration</label>
-          <div class="pill-grid" id="time-options">
-            <button type="button" class="pill-btn active" data-val="15">15 min</button>
-            <button type="button" class="pill-btn" data-val="30">30 min</button>
-            <button type="button" class="pill-btn" data-val="45">45 min</button>
-            <button type="button" class="pill-btn" data-val="60">60 min</button>
+        <!-- 2. WALK DURATION -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">⏳</span>
+            <h3>EXPEDITION TIME</h3>
+          </div>
+          <div class="pill-grid grid-4" id="time-options">
+            <button type="button" class="app-chip-btn active" data-val="15">
+              <span class="chip-val">15m</span>
+              <span class="chip-sub">Quick</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="30">
+              <span class="chip-val">30m</span>
+              <span class="chip-sub">Classic</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="45">
+              <span class="chip-val">45m</span>
+              <span class="chip-sub">Explorer</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="60">
+              <span class="chip-val">60m</span>
+              <span class="chip-sub">Grand</span>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Age Band</label>
-          <div class="pill-grid" id="age-options">
-            <button type="button" class="pill-btn active" data-val="young_kids">Kids (4–8)</button>
-            <button type="button" class="pill-btn" data-val="older_kids">Kids (9–13)</button>
-            <button type="button" class="pill-btn" data-val="adults">Adults / All</button>
+        <!-- 3. AGE BAND -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">👥</span>
+            <h3>SCOUT PARTY</h3>
+          </div>
+          <div class="pill-grid grid-3" id="age-options">
+            <button type="button" class="app-chip-btn active" data-val="young_kids">
+              <span class="chip-emoji">🐣</span>
+              <span class="chip-label">Kids (4–8)</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="older_kids">
+              <span class="chip-emoji">🦊</span>
+              <span class="chip-label">Kids (9–13)</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="adults">
+              <span class="chip-emoji">🦅</span>
+              <span class="chip-label">Adults / All</span>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Season & Region (Hand-typed)</label>
-          <input type="text" id="input-region" class="input-text" value="Autumn / Pacific Northwest" placeholder="e.g. Autumn / City Park">
+        <!-- 4. SEASON SELECTOR (Rich Options!) -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">🍂</span>
+            <h3>SEASON</h3>
+          </div>
+          <div class="pill-grid grid-4" id="season-options">
+            <button type="button" class="app-chip-btn active" data-val="Autumn">
+              <span class="chip-emoji">🍂</span>
+              <span class="chip-label">Autumn</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Winter">
+              <span class="chip-emoji">❄️</span>
+              <span class="chip-label">Winter</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Spring">
+              <span class="chip-emoji">🌱</span>
+              <span class="chip-label">Spring</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Summer">
+              <span class="chip-emoji">☀️</span>
+              <span class="chip-label">Summer</span>
+            </button>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Accessibility</label>
-          <div class="checkbox-group">
-            <label class="checkbox-label">
-              <input type="checkbox" id="chk-paved"> Flat, paved paths only
+        <!-- 5. REGION SELECTOR (Rich Options!) -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">🌍</span>
+            <h3>REGION & BIOME</h3>
+          </div>
+          <div class="pill-grid grid-3" id="region-options">
+            <button type="button" class="app-chip-btn active" data-val="Pacific Northwest">
+              <span class="chip-emoji">🌲</span>
+              <span class="chip-label">Pacific NW</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Northeast Woods">
+              <span class="chip-emoji">🍁</span>
+              <span class="chip-label">Northeast</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Midwest Plains">
+              <span class="chip-emoji">🌳</span>
+              <span class="chip-label">Midwest</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Desert Southwest">
+              <span class="chip-emoji">🌵</span>
+              <span class="chip-label">Southwest</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Coastal Warm">
+              <span class="chip-emoji">🌴</span>
+              <span class="chip-label">Coastal</span>
+            </button>
+            <button type="button" class="app-chip-btn" data-val="Urban Metro">
+              <span class="chip-emoji">🏙️</span>
+              <span class="chip-label">Urban Park</span>
+            </button>
+          </div>
+
+          <!-- Hand-typed Custom Region Override -->
+          <div class="custom-region-container">
+            <div class="custom-region-header">
+              <label for="input-region">Active Region String:</label>
+              <button type="button" id="btn-edit-region" class="btn-text-action">Edit by hand ✏️</button>
+            </div>
+            <input type="text" id="input-region" class="game-input-text" value="Autumn / Pacific Northwest">
+          </div>
+        </div>
+
+        <!-- 6. ACCESSIBILITY MODIFIERS -->
+        <div class="setup-group-card">
+          <div class="group-header">
+            <span class="group-icon">♿</span>
+            <h3>ACCESSIBILITY NEEDS</h3>
+          </div>
+          <div class="accessibility-game-list">
+            <label class="game-switch-item">
+              <input type="checkbox" id="chk-paved">
+              <span class="switch-box"></span>
+              <span class="switch-text">Flat, paved paths & sidewalks only</span>
             </label>
-            <label class="checkbox-label">
-              <input type="checkbox" id="chk-mobility"> Low mobility (closer items)
+            <label class="game-switch-item">
+              <input type="checkbox" id="chk-mobility">
+              <span class="switch-box"></span>
+              <span class="switch-text">Low mobility (ground & waist-level finds)</span>
             </label>
-            <label class="checkbox-label">
-              <input type="checkbox" id="chk-vision"> Low vision (audio/tactile focused)
+            <label class="game-switch-item">
+              <input type="checkbox" id="chk-vision">
+              <span class="switch-box"></span>
+              <span class="switch-text">Low vision (audio & tactile texture focus)</span>
             </label>
           </div>
         </div>
 
-        <button id="btn-start-quest" class="btn-primary">
-          <span>🚀</span> Start Scavenger Walk
-        </button>
+        <!-- BIG 3D TACTILE ACTION BUTTON (Reference: BATTLE ⚡ Button) -->
+        <div class="launch-action-bar">
+          <button id="btn-start-quest" class="game-battle-btn" type="button">
+            <span class="battle-btn-glare"></span>
+            <span class="battle-btn-content">
+              <span class="battle-btn-text">START EXPEDITION</span>
+              <span class="battle-btn-sub">⚡ 5-8 QUEST FINDS</span>
+            </span>
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- 2. WALK VIEW (Inspired by Mobile Navigation Reference) -->
+    <!-- VIEW 2: WALK & RADAR VIEW (Reference: Heads-up Navigation HUD) -->
     <section id="view-walk" class="view-section walk-mode-fullscreen">
       <!-- Full-Screen Interactive Field Radar Canvas -->
       <canvas id="nature-map-canvas"></canvas>
 
-      <!-- Top Floating Navigation Pill (Arrow + to <Item>) -->
+      <!-- Top Floating Navigation Banner (Arrow + to <Item>) -->
       <div class="nav-floating-top">
         <div class="nav-banner-pill" id="nav-banner-pill">
           <div class="nav-arrow-circle">
@@ -153,7 +311,66 @@
       </div>
     </section>
 
-    <!-- 3. HINT & SENSORY PROMPT SHEET -->
+    <!-- VIEW 3: JOURNAL & LOG VIEW -->
+    <section id="view-journal" class="view-section">
+      <div class="chapter-banner-card">
+        <div class="chapter-tag">ARCHIVES</div>
+        <h2 class="chapter-title">Field Journal & Discoveries</h2>
+        <p class="chapter-desc">Review your verified outdoor photos, AI observations, and Screen-to-Sky metrics.</p>
+      </div>
+
+      <div id="journal-history-list" class="journal-history-container">
+        <div class="empty-journal-card">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎒</div>
+          <h3>No walk recorded yet</h3>
+          <p>Start your first walk expedition to unlock field entries and species observations!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: ACHIEVEMENTS / BADGES VIEW -->
+    <section id="view-badges" class="view-section">
+      <div class="chapter-banner-card">
+        <div class="chapter-tag">TROPHIES</div>
+        <h2 class="chapter-title">Nature Badges</h2>
+        <p class="chapter-desc">Earn tokens by looking up at the sky and observing safe nature items.</p>
+      </div>
+
+      <div class="badges-grid">
+        <div class="badge-card unlocked">
+          <div class="badge-icon">🌿</div>
+          <div class="badge-title">First Steps</div>
+          <div class="badge-desc">Start your first walk</div>
+        </div>
+        <div class="badge-card unlocked">
+          <div class="badge-icon">⛅</div>
+          <div class="badge-title">Sky Guardian</div>
+          <div class="badge-desc">Maintain &gt;90% Sky Ratio</div>
+        </div>
+        <div class="badge-card">
+          <div class="badge-icon">🎧</div>
+          <div class="badge-title">Sound Catcher</div>
+          <div class="badge-desc">Complete a Listen prompt</div>
+        </div>
+        <div class="badge-card">
+          <div class="badge-icon">🌳</div>
+          <div class="badge-title">Bark Specialist</div>
+          <div class="badge-desc">Verify touch-safe tree bark</div>
+        </div>
+        <div class="badge-card">
+          <div class="badge-icon">🔍</div>
+          <div class="badge-title">Humble Botanist</div>
+          <div class="badge-desc">Observe cautious species hint</div>
+        </div>
+        <div class="badge-card">
+          <div class="badge-icon">🛡️</div>
+          <div class="badge-title">Zero Net</div>
+          <div class="badge-desc">100% Offline with Gemma 3</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HINT & SENSORY PROMPT SHEET -->
     <div id="hint-overlay" class="modal-overlay">
       <div class="modal-sheet">
         <div class="sheet-handle"></div>
@@ -171,50 +388,74 @@
             <strong>Safety rule:</strong> Stay safe on trails and never touch wild fungi or wildlife.
           </div>
         </div>
-        <button id="btn-close-hint" class="btn-primary" style="margin-top: 1rem;" type="button">Got It!</button>
+        <button id="btn-close-hint" class="game-battle-btn" style="margin-top: 1rem; width: 100%;" type="button">
+          <span class="battle-btn-content"><span class="battle-btn-text">GOT IT!</span></span>
+        </button>
       </div>
     </div>
 
-    <!-- 4. VERIFY MODAL / SHEET -->
+    <!-- VERIFY MODAL / SHEET -->
     <div id="verify-overlay" class="modal-overlay">
       <div class="modal-sheet">
         <div class="sheet-handle"></div>
         <div id="verify-loading" class="loading-spinner">
           <div class="spinner"></div>
-          <p>Gemma 3 examining photo offline...</p>
+          <p>Gemma 3 analyzing find offline...</p>
         </div>
 
         <div id="verify-content" style="display: none; flex-direction: column; gap: 0.85rem;">
           <div id="verify-badge" class="verify-status-badge success">Found!</div>
           <div id="verify-spoken" class="spoken-feedback-box"></div>
           <div id="verify-caveat" class="species-caveat-box" style="display: none;"></div>
-          <button id="btn-next-item" class="btn-primary" style="margin-top: 0.5rem;" type="button">
-            Next Quest Item ➜
+          <button id="btn-next-item" class="game-battle-btn" style="margin-top: 0.5rem; width: 100%;" type="button">
+            <span class="battle-btn-content"><span class="battle-btn-text">NEXT FIND ➜</span></span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- 5. COMPLETE VIEW -->
+    <!-- VIEW 5: COMPLETE VIEW -->
     <section id="view-complete" class="view-section">
-      <div class="setup-card" style="text-align: center; gap: 1.5rem;">
-        <h2 style="color: #2563eb; font-size: 2rem;">🎉 Walk Finished!</h2>
-        <p id="complete-subtitle" style="color: #cbd5e1; font-size: 1.1rem;"></p>
+      <div class="setup-group-card" style="text-align: center; gap: 1.5rem; padding: 2rem 1.25rem;">
+        <div style="font-size: 3rem;">🎉</div>
+        <h2 style="color: #2563eb; font-size: 1.8rem; font-weight: 800;">Expedition Finished!</h2>
+        <p id="complete-subtitle" style="color: #64748b; font-size: 1.05rem;"></p>
 
-        <div style="background: #0b1510; border: 1px solid var(--surface-border); border-radius: 12px; padding: 1.25rem;">
-          <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Screen-to-Sky Ratio</div>
-          <div id="final-sky-ratio" style="font-size: 2.5rem; font-weight: 900; color: #38bdf8; margin: 0.25rem 0;">95.4%</div>
-          <div id="final-time-breakdown" style="font-size: 0.9rem; color: #cbd5e1;"></div>
+        <div class="completion-metrics-box">
+          <div style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em;">Screen-to-Sky Ratio</div>
+          <div id="final-sky-ratio" style="font-size: 2.8rem; font-weight: 900; color: #0284c7; margin: 0.25rem 0;">95.4%</div>
+          <div id="final-time-breakdown" style="font-size: 0.9rem; color: #475569; font-weight: 600;"></div>
         </div>
 
-        <a id="btn-view-journal" href="#" target="_blank" class="btn-primary" style="text-decoration: none;">
-          📖 Open Field Journal
+        <a id="btn-view-journal" href="#" target="_blank" class="game-battle-btn" style="text-decoration: none; display: flex;">
+          <span class="battle-btn-content"><span class="battle-btn-text">📖 OPEN FIELD JOURNAL</span></span>
         </a>
-        <button id="btn-new-walk" type="button" style="background: #192720; border: 1px solid var(--surface-border); color: #cbd5e1; padding: 0.85rem; border-radius: 12px; font-weight: 600; cursor: pointer;">
-          Start New Walk
+        <button id="btn-new-walk" type="button" class="btn-secondary-app">
+          Start New Expedition
         </button>
       </div>
     </section>
+
+    <!-- BOTTOM GAME DOCK (Reference: Mobile Game Bottom Tab Bar) -->
+    <nav class="game-bottom-dock">
+      <button type="button" class="dock-tab-btn active" data-tab="view-setup" id="tab-btn-setup">
+        <span class="dock-tab-icon">🧭</span>
+        <span class="dock-tab-label">EXPEDITION</span>
+      </button>
+      <button type="button" class="dock-tab-btn" data-tab="view-walk" id="tab-btn-walk">
+        <span class="dock-tab-icon">🗺️</span>
+        <span class="dock-tab-label">RADAR</span>
+      </button>
+      <button type="button" class="dock-tab-btn" data-tab="view-journal" id="tab-btn-journal">
+        <span class="dock-tab-icon">🎒</span>
+        <span class="dock-tab-label">JOURNAL</span>
+      </button>
+      <button type="button" class="dock-tab-btn" data-tab="view-badges" id="tab-btn-badges">
+        <span class="dock-tab-icon">🏆</span>
+        <span class="dock-tab-label">BADGES</span>
+      </button>
+    </nav>
+
   </div>
 
   <script src="/app.js"></script>

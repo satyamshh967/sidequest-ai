@@ -206,4 +206,17 @@ export class SidequestDatabase {
     stmt.free();
     return results;
   }
+
+  listSessions(): any[] {
+    if (!this.db) throw new Error('Database not initialized');
+    const stmt = this.db.prepare(
+      'SELECT id, quest_title, setting, age_band, season_and_region, start_time, end_time, duration_seconds, screen_active_seconds, screen_to_sky_ratio FROM sessions ORDER BY created_at DESC LIMIT 20'
+    );
+    const results: any[] = [];
+    while (stmt.step()) {
+      results.push(stmt.getAsObject());
+    }
+    stmt.free();
+    return results;
+  }
 }

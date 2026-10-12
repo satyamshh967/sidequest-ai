@@ -1,7 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="120" fill="#09120e"/>
-  <circle cx="256" cy="256" r="180" fill="#14532d" stroke="#22c55e" stroke-width="16"/>
-  <path d="M256 120 C180 160 160 250 200 340 C220 380 256 392 256 392 C256 392 292 380 312 340 C352 250 332 160 256 120 Z" fill="#22c55e"/>
-  <path d="M256 120 L256 385" stroke="#14532d" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="256" cy="180" r="16" fill="#f0fdf4"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Rounded App Background -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  
+  <!-- Outer Compass Dial Ring -->
+  <circle cx="256" cy="256" r="185" fill="#ffffff" filter="url(#shadow)" opacity="0.95"/>
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#e2e8f0" stroke-width="6"/>
+  <circle cx="256" cy="256" r="160" fill="#f8fafc"/>
+  
+  <!-- North Gold Star Pointer -->
+  <polygon points="256,110 270,165 256,155 242,165" fill="url(#goldGrad)"/>
+  <!-- South Pointer -->
+  <polygon points="256,402 270,347 256,357 242,347" fill="#94a3b8"/>
+  <!-- East Pointer -->
+  <polygon points="402,256 347,270 357,256 347,242" fill="#cbd5e1"/>
+  <!-- West Pointer -->
+  <polygon points="110,256 165,270 155,256 165,242" fill="#cbd5e1"/>
+  
+  <!-- Central Nature Leaf -->
+  <path d="M256,140 C175,190 155,290 200,375 C220,410 256,420 256,420 C256,420 292,410 312,375 C357,290 337,190 256,140 Z" fill="url(#leafGrad)"/>
+  <path d="M256,140 L256,412" stroke="#15803d" stroke-width="8" stroke-linecap="round"/>
+  <path d="M256,260 Q285,240 300,225" stroke="#86efac" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M256,310 Q225,290 210,275" stroke="#86efac" stroke-width="6" stroke-linecap="round" fill="none"/>
+  
+  <!-- Compass Central Golden Gem -->
+  <circle cx="256" cy="256" r="24" fill="url(#goldGrad)" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="256" cy="256" r="8" fill="#ffffff"/>
 </svg>
