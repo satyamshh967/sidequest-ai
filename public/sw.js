@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sidequest-v1';
+const CACHE_NAME = 'sidequest-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -9,10 +9,10 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -23,17 +23,25 @@ self.addEventListener('activate', (event) => {
           if (key !== CACHE_NAME) return caches.delete(key);
         })
       )
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-  // Let /api calls go directly to the local server
+  // Let API and uploads go directly to server
   if (event.request.url.includes('/api/') || event.request.url.includes('/uploads/')) {
     return;
   }
+  // Network first; fall back to cache for offline outdoor walks
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
