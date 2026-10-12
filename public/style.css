@@ -22,40 +22,42 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #090d16;
+  background: #f1f5f9;
   color: var(--text-main);
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  overflow: hidden;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* App Shell (Edge-to-edge on Mobile, roomy native app container on Desktop) */
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* App Shell (Full Page Clean Layout) */
 .game-app-shell {
   width: 100%;
-  max-width: 560px;
-  height: 100vh;
-  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
   background: #f8fafc;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-}
-
-@media (min-width: 560px) {
-  .game-app-shell {
-    height: 96vh;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-  }
+  overflow-x: hidden;
 }
 
 /* ========================================================= */
@@ -63,14 +65,21 @@ body {
 /* ========================================================= */
 .game-top-bar {
   background: #0284c7;
-  padding: env(safe-area-inset-top, 10px) 14px 10px 14px;
+  padding: env(safe-area-inset-top, 10px) 20px 10px 20px;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.2);
+  z-index: 40;
+  width: 100%;
+  position: sticky;
+  top: 0;
+}
+.top-bar-inner {
+  max-width: 1160px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
-  z-index: 30;
-  flex-shrink: 0;
+  gap: 12px;
+  width: 100%;
 }
 
 /* Player Level Pill */
@@ -158,15 +167,18 @@ body {
 }
 
 /* ========================================================= */
+/* ========================================================= */
 /* 2. VIEWS CONTAINER                                        */
 /* ========================================================= */
 .view-section {
   display: none;
   flex-direction: column;
   flex-grow: 1;
-  overflow-y: auto;
-  padding: 12px 14px 85px 14px;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 24px 24px 100px 24px;
+  overflow-x: hidden;
 }
 .view-section.active {
   display: flex;
@@ -176,78 +188,105 @@ body {
 .chapter-banner-card {
   background: #0284c7;
   color: #ffffff;
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.2);
+  border-radius: 22px;
+  padding: 22px 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.18);
   position: relative;
   overflow: hidden;
 }
 .chapter-banner-card::after {
   content: "🌿";
   position: absolute;
-  right: -10px;
-  bottom: -15px;
-  font-size: 5rem;
+  right: 15px;
+  bottom: -20px;
+  font-size: 6rem;
   opacity: 0.12;
+  pointer-events: none;
 }
 .chapter-tag {
   display: inline-block;
   background: rgba(255, 255, 255, 0.22);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
   margin-bottom: 6px;
 }
 .chapter-title {
-  font-size: 1.45rem;
+  font-size: 1.65rem;
   font-weight: 900;
   letter-spacing: -0.02em;
   margin-bottom: 4px;
 }
 .chapter-desc {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: #e0f2fe;
   line-height: 1.4;
+  max-width: 720px;
 }
 
-/* Setup Content & Group Cards */
+/* Setup Content & Group Cards (Spacious 2-Column Grid on Desktop) */
 .game-setup-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .game-setup-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+  .launch-action-bar {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+  }
 }
 
 .setup-group-card {
-  background: var(--card-bg);
-  border-radius: 18px;
-  padding: 14px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px 22px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
+.setup-group-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
 .group-header {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
 }
 .group-icon {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
 }
 .group-header h3 {
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #334155;
+  text-transform: uppercase;
 }
 
 /* Grids for Chips */
 .pill-grid {
   display: grid;
-  gap: 8px;
+  gap: 10px;
+  width: 100%;
 }
 .grid-4 {
   grid-template-columns: repeat(4, 1fr);
@@ -256,51 +295,62 @@ body {
   grid-template-columns: repeat(3, 1fr);
 }
 
+@media (max-width: 480px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* Tactile Game Chips / Buttons */
 .app-chip-btn {
-  background: #f1f5f9;
-  border: 2px solid transparent;
-  border-radius: 14px;
-  padding: 10px 4px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 12px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.16s ease;
   color: #334155;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  min-height: 72px;
+}
+.app-chip-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
 }
 .app-chip-btn:active {
-  transform: scale(0.96);
+  transform: translateY(0) scale(0.98);
 }
 .app-chip-btn.active {
   background: #eff6ff;
   border-color: #2563eb;
   color: #1d4ed8;
   font-weight: 800;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.16);
 }
 .chip-emoji {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 .chip-label {
-  font-size: 0.76rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 .chip-val {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 900;
-  color: #1e293b;
+  color: #0f172a;
 }
 .app-chip-btn.active .chip-val {
   color: #1d4ed8;
 }
 .chip-sub {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   color: #64748b;
   font-weight: 600;
 }
@@ -310,16 +360,16 @@ body {
 
 /* Custom Region Input Section */
 .custom-region-container {
-  margin-top: 4px;
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 .custom-region-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #64748b;
 }
@@ -327,24 +377,26 @@ body {
   background: none;
   border: none;
   color: #2563eb;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
 }
 .game-input-text {
   width: 100%;
   background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #0f172a;
+  transition: all 0.15s ease;
 }
 .game-input-text:focus {
   outline: none;
   border-color: #2563eb;
   background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 /* Accessibility Game Switches */
@@ -447,10 +499,16 @@ body {
 /* 4. WALK VIEW (Mobile Navigation Radar HUD)                */
 /* ========================================================= */
 .walk-mode-fullscreen {
-  position: absolute;
-  inset: 0;
-  padding: 0;
-  overflow: hidden;
+  position: fixed !important;
+  top: 56px !important;
+  bottom: 70px !important;
+  left: 0 !important;
+  right: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
   display: none;
   background: #f1f5f9;
   z-index: 20;
@@ -469,9 +527,11 @@ body {
 /* Top Floating Pill Banner */
 .nav-floating-top {
   position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 580px;
   display: flex;
   justify-content: center;
   padding: 0 16px;
@@ -562,9 +622,12 @@ body {
 /* Bottom HUD Floating Card Container */
 .bottom-hud-wrapper {
   position: absolute;
-  bottom: 80px; /* Above game dock */
-  left: 14px;
-  right: 14px;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 580px;
+  padding: 0 16px;
   z-index: 25;
   display: flex;
   flex-direction: column;
@@ -701,19 +764,29 @@ body {
 /* 5. BOTTOM GAME DOCK (Reference: Image 2 Bottom Tabs)       */
 /* ========================================================= */
 .game-bottom-dock {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 70px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   padding-bottom: env(safe-area-inset-bottom, 4px);
-  z-index: 35;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  z-index: 40;
+  box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.06);
+}
+.dock-inner {
+  max-width: 680px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
 }
 .dock-tab-btn {
   background: none;
@@ -724,16 +797,20 @@ body {
   justify-content: center;
   gap: 3px;
   cursor: pointer;
-  padding: 6px 14px;
-  border-radius: 12px;
+  padding: 8px 18px;
+  border-radius: 14px;
   transition: all 0.15s ease;
   color: #64748b;
+}
+.dock-tab-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
 }
 .dock-tab-icon {
   font-size: 1.35rem;
 }
 .dock-tab-label {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.05em;
 }
@@ -746,17 +823,20 @@ body {
 /* 6. JOURNAL, BADGES & COMPLETION VIEWS                     */
 /* ========================================================= */
 .journal-history-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  width: 100%;
 }
 .empty-journal-card {
+  grid-column: 1 / -1;
   background: #ffffff;
   border-radius: 20px;
-  padding: 32px 16px;
+  padding: 40px 20px;
   text-align: center;
   color: #64748b;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  border: 1px solid #e2e8f0;
 }
 .empty-journal-card h3 {
   color: #0f172a;
@@ -766,8 +846,9 @@ body {
 
 .badges-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  width: 100%;
 }
 .badge-card {
   background: #ffffff;

@@ -32,31 +32,33 @@
     
     <!-- Top Game Status Bar (Reference: Mobile Game Top HUD) -->
     <header class="game-top-bar">
-      <!-- Player Profile Badge -->
-      <div class="player-hud-pill">
-        <div class="player-avatar-icon">🤠</div>
-        <div class="player-hud-meta">
-          <span class="player-name">SCOUT</span>
-          <span class="player-level-badge">⭐ LV. 1</span>
+      <div class="top-bar-inner">
+        <!-- Player Profile Badge -->
+        <div class="player-hud-pill">
+          <div class="player-avatar-icon">🤠</div>
+          <div class="player-hud-meta">
+            <span class="player-name">SCOUT</span>
+            <span class="player-level-badge">⭐ LV. 1</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Live Nature / Sky Energy -->
-      <div class="resource-hud-pill energy-pill" id="hud-energy-pill" title="Screen-to-Sky ratio">
-        <span class="resource-icon">⚡</span>
-        <span class="resource-val" id="top-sky-meter">100% SKY</span>
-      </div>
+        <!-- Live Nature / Sky Energy -->
+        <div class="resource-hud-pill energy-pill" id="hud-energy-pill" title="Screen-to-Sky ratio">
+          <span class="resource-icon">⚡</span>
+          <span class="resource-val" id="top-sky-meter">100% SKY</span>
+        </div>
 
-      <!-- Seed Tokens / XP -->
-      <div class="resource-hud-pill seeds-pill" title="Expedition Score">
-        <span class="resource-icon">🌰</span>
-        <span class="resource-val" id="top-seeds-count">150</span>
-      </div>
+        <!-- Seed Tokens / XP -->
+        <div class="resource-hud-pill seeds-pill" title="Expedition Score">
+          <span class="resource-icon">🌰</span>
+          <span class="resource-val" id="top-seeds-count">150</span>
+        </div>
 
-      <!-- 100% Offline Local Badge -->
-      <div class="offline-shield-badge" title="Running 100% Offline with Gemma 3">
-        <span class="shield-dot"></span>
-        <span>LOCAL</span>
+        <!-- 100% Offline Local Badge -->
+        <div class="offline-shield-badge" title="Running 100% Offline with Gemma 3">
+          <span class="shield-dot"></span>
+          <span>LOCAL</span>
+        </div>
       </div>
     </header>
 
@@ -452,22 +454,24 @@
 
     <!-- BOTTOM GAME DOCK (Reference: Mobile Game Bottom Tab Bar) -->
     <nav class="game-bottom-dock">
-      <button type="button" class="dock-tab-btn active" data-tab="view-setup" id="tab-btn-setup">
-        <span class="dock-tab-icon">🧭</span>
-        <span class="dock-tab-label">EXPEDITION</span>
-      </button>
-      <button type="button" class="dock-tab-btn" data-tab="view-walk" id="tab-btn-walk">
-        <span class="dock-tab-icon">🗺️</span>
-        <span class="dock-tab-label">RADAR</span>
-      </button>
-      <button type="button" class="dock-tab-btn" data-tab="view-journal" id="tab-btn-journal">
-        <span class="dock-tab-icon">🎒</span>
-        <span class="dock-tab-label">JOURNAL</span>
-      </button>
-      <button type="button" class="dock-tab-btn" data-tab="view-badges" id="tab-btn-badges">
-        <span class="dock-tab-icon">🏆</span>
-        <span class="dock-tab-label">BADGES</span>
-      </button>
+      <div class="dock-inner">
+        <button type="button" class="dock-tab-btn active" data-tab="view-setup" id="tab-btn-setup">
+          <span class="dock-tab-icon">🧭</span>
+          <span class="dock-tab-label">EXPEDITION</span>
+        </button>
+        <button type="button" class="dock-tab-btn" data-tab="view-walk" id="tab-btn-walk">
+          <span class="dock-tab-icon">🗺️</span>
+          <span class="dock-tab-label">RADAR</span>
+        </button>
+        <button type="button" class="dock-tab-btn" data-tab="view-journal" id="tab-btn-journal">
+          <span class="dock-tab-icon">🎒</span>
+          <span class="dock-tab-label">JOURNAL</span>
+        </button>
+        <button type="button" class="dock-tab-btn" data-tab="view-badges" id="tab-btn-badges">
+          <span class="dock-tab-icon">🏆</span>
+          <span class="dock-tab-label">BADGES</span>
+        </button>
+      </div>
     </nav>
 
   </div>
